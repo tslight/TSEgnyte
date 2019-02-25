@@ -17,7 +17,7 @@ function ConvertFrom-EgnyteGroups {
 	$GroupObj | Add-Member -MemberType NoteProperty -Name "Permissions" -Value $Groups[$Name]
 	if ($Permissions.Groups.Name -Contains $Name) {
 	    Write-Host -Back Black -Fore Cyan "Already queried $Name group."
-	    $Members = ($Permissions.Groups | ? { $_.Name -eq $Name }).Members
+	    $Members = ($Permissions.Groups | ? { $_.Name -eq $Name })[0].Members # only need first occurance otherwise this grows expontentially!
 	} else {
 	    Write-Host -Back Black -Fore Magenta "Getting members of $Name group..."
 	    $Members = (Get-ADGroupMembersByName $Name -Quick).Name

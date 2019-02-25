@@ -5,8 +5,7 @@ function New-EgnyteRequest {
 	[Parameter(Mandatory)][object]$Session,
 	[Parameter(Mandatory)][string]$Resource,
 	[string]$OutFile,
-	[string]$InFile,
-	[int]$Timeout=200
+	[string]$InFile
     )
 
     # $Resource = [System.Web.HttpUtility]::UrlEncode($Resource)
@@ -27,6 +26,6 @@ function New-EgnyteRequest {
     } elseif ($InFile) {
 	return Invoke-RestMethod @RestArgs -InFile $InFile
     } else {
-	return Invoke-RestMethod @RestArgs -Timeout $Timeout
+	return Invoke-RestMethod @RestArgs
     }
 }
