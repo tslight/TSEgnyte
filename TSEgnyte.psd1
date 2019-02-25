@@ -52,8 +52,8 @@
 
     # Modules that must be imported into the global environment prior to importing this module
     RequiredModules = @(
-	# 'ActiveDirectory',
-	# 'MCSAD',
+	'ActiveDirectory',
+	'MCSAD',
 	'TSUtils')
 
     # Assemblies that must be loaded prior to importing this module

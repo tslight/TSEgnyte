@@ -8,6 +8,10 @@ function Get-EgnytePermissions {
 	[int]$Depth=0
     )
 
+    begin {
+	$Permissions = @()
+    }
+
     process {
 	$Params     = @{
 	    Path    = $Root
@@ -28,14 +32,11 @@ function Get-EgnytePermissions {
 	    Write-Host -Back Black -Fore Green "Getting perms for $Path"
 	    $Folder = Get-EgnyteChildItem -Path $Path -Session $Session -Perms
 
-	    $Groups = $Folder.groupPerms |
-	      Select-Object -ExcludeProperty 'All Administrators' |
-	      ConvertTo-HashTable
-	    $Users  = $Folder.userPerms |
-	      Select-Object -ExcludeProperty 'All Administrators' |
-	      ConvertTo-HashTable
-	    # $Groups = ConvertFrom-EgnyteGroups $Groups $Perms
-	    # $Users  = ConvertFrom-EgnyteUsers $Users $Groups
+	    $Groups = $Folder.groupPerms | ConvertTo-HashTable
+	    $Groups.Remove('All Administrators')
+	    $Users  = $Folder.userPerms  | ConvertTo-HashTable
+	    $Groups = ConvertFrom-EgnyteGroups $Groups $Permissions
+	    $Users  = ConvertFrom-EgnyteUsers $Users $Groups
 
 	    $Properties = @{
 		Path    = $Path
@@ -43,7 +44,12 @@ function Get-EgnytePermissions {
 		Users   = $Users
 	    }
 
-	    New-Object PSObject -Property $Properties
+	    $FolderPermissions = New-Object PSObject -Property $Properties
+	    $Permissions += $FolderPermissions
 	}
+    }
+
+    end {
+	return $Permissions
     }
 }
