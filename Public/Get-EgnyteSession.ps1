@@ -1,10 +1,8 @@
 function Get-EgnyteSession {
     [cmdletbinding()]
     Param (
-	[Parameter(Mandatory,ValueFromPipeline)]
-	[string]$Instance,
-	[Parameter(Mandatory,ValueFromPipeline)]
-	[string]$Username,
+	[string]$Instance=$(Read-Host "Enter your Egnyte instance name"),
+	[string]$Username=$(Read-Host "Enter an Egnyte admin username"),
 	[System.IO.FileInfo]$JsonSessionsDir=$JsonSessionsDir
     )
 
