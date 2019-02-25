@@ -18,9 +18,12 @@ function Get-EgnytePermissions {
 	    Session = $Session
 	    Depth   = $Depth
 	}
-	$msg = (
-	    "Getting $Depth levels of folders starting at $Root..."
-	)
+
+	if ($Depth -eq 0) {
+	    $msg = "Finding folders under $Root..."
+	} else {
+	    $msg = "Finding folders under $Root recursively to a depth of $Depth."
+	}
 	Write-Host -Back Black -Fore Magenta $msg
 	$Folders = Get-EgnyteFolders @Params
 
@@ -29,7 +32,7 @@ function Get-EgnytePermissions {
 		continue
 	    }
 
-	    Write-Host -Back Black -Fore Green "Getting perms for $Path"
+	    Write-Host -Back Black -Fore Green "Getting Egnyte permissions for $Path..."
 	    $Folder = Get-EgnyteChildItem -Path $Path -Session $Session -Perms
 
 	    $Groups = $Folder.groupPerms | ConvertTo-HashTable
