@@ -29,7 +29,7 @@ function New-EgnyteSession {
 		"instance"   = $Instance
 		"base_uri"   = $URL
 	    }
-	    $Client | ConvertTo-Json | Out-File "$JsonSessionsDir\$Instance.$Username.json"
+	    $Client | ConvertTo-Json | Out-File -Encoding UTF8 "$JsonSessionsDir\$Instance.$Username.json"
 	    return $Client
 	} else {
 	    throw "Failed to authenticate to Egnyte."

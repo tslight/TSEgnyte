@@ -35,7 +35,7 @@ if (Test-Path "$PSScriptRoot\$ConfigFile") {
     JsonSessionsDir  = ""
     EgnyteAPIKeyFile = ""
 }
-"@ | Out-File -FilePath "$PSScriptRoot\$ConfigFile"
+"@ | Out-File -Encoding UTF8 -FilePath "$PSScriptRoot\$ConfigFile"
     Write-Warning "Generated $PSScriptRoot\$ConfigFile."
     Write-Warning "Please edit $ConfigFile and re-import module."
 }
