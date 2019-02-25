@@ -5,7 +5,8 @@ Function Get-EgnyteFolders {
 	[string]$Path,
 	[Parameter(Mandatory)]
 	[object]$Session,
-	[int]$Depth=0
+	[int]$Depth=0,
+	[switch]$IncludeParent
     )
 
     $Params      = @{
@@ -13,6 +14,10 @@ Function Get-EgnyteFolders {
 	Session  = $Session
     }
     $Children = (Get-EgnyteChildItem @Params).folders.path
+
+    if ($IncludeParent) {
+	Write-Output $Path
+    }
 
     if ($Children) {
 	if ($Depth -gt 0) {

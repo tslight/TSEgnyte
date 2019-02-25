@@ -13,10 +13,11 @@ function Get-EgnytePermissions {
     }
 
     process {
-	$Params     = @{
-	    Path    = $Root
-	    Session = $Session
-	    Depth   = $Depth
+	$Params           = @{
+	    Path          = $Root
+	    Session       = $Session
+	    Depth         = $Depth
+	    IncludeParent = $True
 	}
 
 	if ($Depth -eq 0) {
@@ -24,6 +25,7 @@ function Get-EgnytePermissions {
 	} else {
 	    $msg = "Finding folders under $Root recursively to a depth of $Depth."
 	}
+
 	Write-Host -Back Black -Fore Magenta $msg
 	$Folders = Get-EgnyteFolders @Params
 

@@ -17,9 +17,10 @@ function ConvertFrom-EgnyteUsers {
 	    try {
 		$ADName = (Get-ADUserBySam $Name).Name
 		if (!$ADName) {
-		    Write-Warning "Failed to get AD name of $Name."
-		    $ADName = (Get-Culture).TextInfo.ToTitleCase("$Name")
-		    $ADName = $ADName -Replace ("\."," ")
+		    Write-Warning "Failed to get AD name of $Name. Adding (Non-Employee) to name.."
+		    $ADName  = (Get-Culture).TextInfo.ToTitleCase("$Name")
+		    $ADName  = $ADName -Replace ("\."," ")
+		    $ADName += " (Non-Employee)"
 		}
 		$NewHT[$ADName] = $Users[$Name]
 	    } catch {
