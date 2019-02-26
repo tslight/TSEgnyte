@@ -77,7 +77,7 @@ End Sub
 	}
 
 	try {
-	    Get-ChildItem "$Path\*.csv" | ConvertTo-XlsxFromCsv -Xlsx "$Path\$Name"
+	    Get-ChildItem "$Path\*.csv" | Convert-CsvToXls -Xlsx "$Path\$Name"
 	    Remove-Item "$Path\*.csv"
 	} catch {
 	    Write-Warning $_.InvocationInfo.ScriptName
