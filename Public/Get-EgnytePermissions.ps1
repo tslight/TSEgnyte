@@ -42,7 +42,6 @@ function Get-EgnytePermissions {
 	    $Users  = $Folder.userPerms  | ConvertTo-HashTable
 	    $Groups = ConvertFrom-EgnyteGroups $Groups $Permissions
 	    $Users  = ConvertFrom-EgnyteUsers $Users $Groups
-
 	    $Properties = @{
 		Path    = $Path
 		Groups  = $Groups
