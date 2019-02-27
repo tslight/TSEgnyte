@@ -44,11 +44,11 @@ function Get-EgnytePermissions {
 		    $Parent = ($Parent | Split-Path -Parent) -Replace ('\\','/')
 		}
 	    }
-	    $ParentPermissions = $Permissions | ? { $_.Path -eq $Parent }
-	    $ParentGroups = $ParentPermissions.Groups.Name | Sort-Object -Descending | Sort-Object -Unique
-	    $CurrentGroups = $Groups.Keys | Sort-Object -Descending | Sort-Object -Unique
-	    $ParentUsers = $ParentPermissions.Users.Name | Sort-Object -Descending -Unique
-	    $CurrentUsers = $Users.Keys | Sort-Object -Descending -Unique
+	    $ParentPermissions	= $Permissions | ? { $_.Path -eq $Parent }
+	    $ParentGroups	= $ParentPermissions.Groups.Name | Sort-Object -Unique | Sort-Object -Descending
+	    $CurrentGroups	= $Groups.Keys                   | Sort-Object -Unique | Sort-Object -Descending
+	    $ParentUsers	= $ParentPermissions.Users.Name  | Sort-Object -Unique | Sort-Object -Descending
+	    $CurrentUsers	= $Users.Keys                    | Sort-Object -Unique | Sort-Object -Descending
 	    if ($ParentGroups -eq $CurrentGroups -And $ParentUsers -eq $CurrentUsers) {
 		Write-Host -Back Black -Fore Cyan "Permissions are the same as parent directory. Skipping."
 		continue
