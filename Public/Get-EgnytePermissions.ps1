@@ -30,16 +30,29 @@ function Get-EgnytePermissions {
 	$Folders = Get-EgnyteFolders @Params
 
 	foreach ($Path in $Folders) {
-	    if ($Path -match '.*\.Temporaryitems.*|.*\.Trashes.*') {
+	    if ($Path -match '.*\.Temporaryitems.*|.*\.Trashes.*|.*__MACOSX.*') {
 		continue
 	    }
-
 	    Write-Host -Back Black -Fore Green "Getting Egnyte permissions for $Path..."
 	    $Folder = Get-EgnyteChildItem -Path $Path -Session $Session -Perms
-
 	    $Groups = $Folder.groupPerms | ConvertTo-HashTable
 	    $Groups.Remove('All Administrators')
 	    $Users  = $Folder.userPerms  | ConvertTo-HashTable
+	    $Parent = ($Path | Split-Path -Parent) -Replace ('\\','/')
+	    if ($Parent -And $Permissions) {
+		While ($Permissions.Path -NotContains $Parent) {
+		    $Parent = ($Parent | Split-Path -Parent) -Replace ('\\','/')
+		}
+	    }
+	    $ParentPermissions = $Permissions | ? { $_.Path -eq $Parent }
+	    $ParentGroups = $ParentPermissions.Groups.Name | Sort-Object -Descending | Sort-Object -Unique
+	    $CurrentGroups = $Groups.Keys | Sort-Object -Descending | Sort-Object -Unique
+	    $ParentUsers = $ParentPermissions.Users.Name | Sort-Object -Descending -Unique
+	    $CurrentUsers = $Users.Keys | Sort-Object -Descending -Unique
+	    if ($ParentGroups -eq $CurrentGroups -And $ParentUsers -eq $CurrentUsers) {
+		Write-Host -Back Black -Fore Cyan "Permissions are the same as parent directory. Skipping."
+		continue
+	    }
 	    $Groups = ConvertFrom-EgnyteGroups $Groups $Permissions
 	    $Users  = ConvertFrom-EgnyteUsers $Users $Groups
 	    $Properties = @{
@@ -47,7 +60,6 @@ function Get-EgnytePermissions {
 		Groups  = $Groups
 		Users   = $Users
 	    }
-
 	    $FolderPermissions = New-Object PSObject -Property $Properties
 	    $Permissions += $FolderPermissions
 	}

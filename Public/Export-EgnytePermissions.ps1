@@ -98,7 +98,7 @@ End Sub
 	}
 
 	try {
-	    Add-XlsTitleRow "$Path\$Name.Xlsx" "Permissions Report - Click on count to view users"
+	    Add-XlsTitleRow "$Path\$Name.Xlsx" "$Name Permissions - Click count to view users"
 	    Add-VbaToXls "$Path\$Name.Xlsx" $VbaCode
 	    Remove-Item "$Path\$Name.Xlsx"
 	} catch {
