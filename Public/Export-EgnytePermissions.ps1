@@ -29,8 +29,19 @@ value1 = ThisWorkbook.Sheets(2).Cells(MyRow - 1, MyCol)
 value1 = value1 & "|"
 LArray = Split(value1, "|")
 
+Dim TopRow As Long
+With ActiveWindow.VisibleRange
+TopRow = .Row
+End With
+
 For R = 0 To UBound(LArray) - 1
-Cells(R + 2, 7).Value = LArray(R)
+Dim Row As Long
+If TopRow > 2 Then
+Row = TopRow + R
+Else
+Row = TopRow + R + 2
+End If
+Cells(Row, 7).Value = LArray(R)
 Next
 Else
 Worksheets("Permissions").Columns(7).ClearContents
