@@ -53,9 +53,18 @@ function Get-EgnytePermissions {
 	    if ($ParentGroups -eq $CurrentGroups -And $ParentUsers -eq $CurrentUsers) {
 		Write-Host -Back Black -Fore Cyan "Permissions are the same as parent directory. Skipping."
 		continue
+	    } elseif ($ParentGroups -eq $CurrentGroups) {
+		Write-Host -Back Black -Fore Cyan "Group permissions are the same as parent directory."
+		$Groups = $ParentPermissions.Groups
+		$Users  = ConvertFrom-EgnyteUsers $Users $Groups
+	    } elseif ($ParentUsers -eq $CurrentUsers) {
+		Write-Host -Back Black -Fore Cyan "User permissions are the same as parent directory."
+		$Groups = ConvertFrom-EgnyteGroups $Groups $Permissions
+		$Users = $ParentPermissions.Users
+	    } else {
+		$Groups = ConvertFrom-EgnyteGroups $Groups $Permissions
+		$Users  = ConvertFrom-EgnyteUsers $Users $Groups
 	    }
-	    $Groups = ConvertFrom-EgnyteGroups $Groups $Permissions
-	    $Users  = ConvertFrom-EgnyteUsers $Users $Groups
 	    $Properties = @{
 		Path    = $Path
 		Groups  = $Groups
