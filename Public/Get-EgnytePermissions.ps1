@@ -40,7 +40,8 @@ function Get-EgnytePermissions {
 	    $Users  = $Folder.userPerms  | ConvertTo-HashTable
 	    $Parent = ($Path | Split-Path -Parent) -Replace ('\\','/')
 	    if ($Parent -And $Permissions) {
-		While ($Permissions.Path -NotContains $Parent) {
+		while ($Permissions.Path -NotContains $Parent) {
+		    if ($Parent -eq $Root) { break }
 		    $Parent = ($Parent | Split-Path -Parent) -Replace ('\\','/')
 		}
 	    }
