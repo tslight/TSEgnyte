@@ -28,7 +28,7 @@ function Get-EgnyteAllUsers {
     }
 
     if ($Response.resources -ne $Null) {
-	$Users += $Response
+	$Users += $Response.resources
 	$StartIndex += 100
 	Get-EgnyteAllUsers -Session $Session -StartIndex $StartIndex -Users $Users
     } else {

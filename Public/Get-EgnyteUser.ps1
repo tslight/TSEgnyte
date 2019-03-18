@@ -13,17 +13,22 @@ function Get-EgnyteUser {
 
     process {
 	$Email		= $ADUser.EmailAddress
-	$UPN            = $ADUser.UserPrincipalName
+	$Sam            = $ADUser.SamAccountName
 	$SID		= $ADUser.SID
 	$Resource	= "pubapi/v2/users?filter"
 
 	if ($Email) {
 	    $Query = "email eq $Email"
 	} elseif ($UPN) {
-	    $Query = "userPrincipalName eq $UPN"
+	    $Query = "userName eq $Sam"
 	} elseif ($SID) {
 	    $Query = "externalId eq $SID"
+	} else {
+	    Write-Warning "Cannot find email, userName or externalId."
+	    continue
 	}
+
+	$Query = [System.Web.HttpUtility]::UrlEncode($Query)
 
 	$Resource = "$Resource=$Query"
 
@@ -39,6 +44,7 @@ function Get-EgnyteUser {
 	    Write-Warning $_.InvocationInfo.ScriptName
 	    Write-Warning $_.InvocationInfo.Line
 	    Write-Warning $_.Exception.Message
+	    Write-Warning $Resource
 	}
 
 	$EgnyteUsers += $EgnyteUser.resources

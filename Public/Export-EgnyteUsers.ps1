@@ -8,17 +8,32 @@ function Export-EgnyteUsers {
 	[string]$Name="AllEgnyteUsers"
     )
 
-    $Pages = Get-EgnyteAllUsers -Session $Session
-    $Users = $Pages.resources
+    $Users = Get-EgnyteAllUsers -Session $Session
 
     $Selection = @(
 	@{
-	    Name = 'User'
+	    Name = 'Username'
 	    Expression = {$_.userName}
+	},
+	@{
+	    Name = 'Name'
+	    Expression = {$_.name.formatted}
 	},
 	@{
 	    Name = 'UPN'
 	    Expression = {$_.userPrincipalName}
+	},
+	@{
+	    Name = 'Account Type'
+	    Expression = {$_.userType}
+	},
+	@{
+	    Name = 'Account Role'
+	    Expression = {$_.role}
+	},
+	@{
+	    Name = 'Service Account'
+	    Expression = {$_.isServiceAccount}
 	},
 	@{
 	    Name = 'Active'
@@ -31,14 +46,6 @@ function Export-EgnyteUsers {
 	@{
 	    Name = 'Authorisation'
 	    Expression = {$_.authType}
-	},
-	@{
-	    Name = 'Account Role'
-	    Expression = {$_.role}
-	},
-	@{
-	    Name = 'Service Account'
-	    Expression = {$_.isServiceAccount}
 	},
 	@{
 	    Name = 'Last Active Date'
