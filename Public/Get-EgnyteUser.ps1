@@ -36,7 +36,9 @@ function Get-EgnyteUser {
 	try {
 	    $EgnyteUser = New-EgnyteRequest @RequestArgs
 	} catch {
-	    Write-Warning $_
+	    Write-Warning $_.InvocationInfo.ScriptName
+	    Write-Warning $_.InvocationInfo.Line
+	    Write-Warning $_.Exception.Message
 	}
 
 	$EgnyteUsers += $EgnyteUser.resources
