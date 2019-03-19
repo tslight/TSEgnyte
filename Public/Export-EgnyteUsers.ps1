@@ -3,8 +3,7 @@ function Export-EgnyteUsers {
     Param (
 	[Parameter(Mandatory)]
 	[System.IO.FileInfo]$Path,
-	[Parameter(Mandatory)]
-	[object]$Session,
+	[object]$Session=(Get-EgnyteSession),
 	[string]$Name="AllEgnyteUsers"
     )
 
