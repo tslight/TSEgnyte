@@ -19,7 +19,6 @@ Egnyte users that have active accounts who are disabled in AD.
 .LINK
 https://developers.egnyte.com/docs/User_Management_API_Documentation
 #>
-
     [CmdletBinding(SupportsShouldProcess)]
     Param (
 	[object]$Session=(Get-EgnyteSession)
