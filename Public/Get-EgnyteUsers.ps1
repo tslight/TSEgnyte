@@ -1,9 +1,8 @@
 function Get-EgnyteUsers {
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding(SupportsShouldProcess,DefaultParameterSetName="Filter")]
     Param (
 	[object]$Session=(Get-EgnyteSession),
 	[int]$StartIndex=1,
-	[array]$Users=@(),
 	[Parameter(ParameterSetName="Filter")]
 	[string]$Filter,
 	[Parameter(ParameterSetName="UserName")]
@@ -23,8 +22,8 @@ function Get-EgnyteUsers {
     }
 
     if ($Filter) {
-	$Filter = [System.Web.HttpUtility]::UrlEncode($Filter)
-	$Resource = "pubapi/v2/users?count=100&startIndex=$StartIndex&$Filter"
+	$SanitisedFilter = [System.Web.HttpUtility]::UrlEncode($Filter)
+	$Resource = "pubapi/v2/users?count=100&startIndex=$StartIndex&filter=$SanitisedFilter"
     } else {
 	$Resource = "pubapi/v2/users?count=100&startIndex=$StartIndex"
     }
@@ -37,10 +36,14 @@ function Get-EgnyteUsers {
 
     try {
 	$Response = New-EgnyteRequest @RequestArgs
-	$msg = (
-	    "Retrieved $StartIndex - $($StartIndex + 100) of $($Response.totalResults) results..."
-	)
-	Write-Host -Back Black -Fore Cyan $msg
+	if ($Response.totalResults -gt 100) {
+	    $msg = (
+		"Retrieved $StartIndex - $($StartIndex + 100) of $($Response.totalResults) results..."
+	    )
+	} else {
+	    $msg = "Retrieved $($Response.totalResults) results."
+	}
+	Write-Verbose $msg
 	Write-Verbose $Response
     } catch {
 	Write-Warning $_.InvocationInfo.ScriptName
@@ -50,10 +53,15 @@ function Get-EgnyteUsers {
     }
 
     if ($Response.resources -ne $Null) {
-	$Users += $Response.resources
-	$StartIndex += 100
-	Get-EgnyteAllUsers -Session $Session -StartIndex $StartIndex -Users $Users
-    } else {
-	return $Users
+	$Response.resources
+	if (($StartIndex + 100) -le $Response.totalResults) {
+	    $StartIndex += 100
+	    $Params = @{
+		Session = $Session
+		StartIndex = $StartIndex
+		Filter = $Filter
+	    }
+	    Get-EgnyteUsers @Params
+	}
     }
 }
