@@ -1,4 +1,29 @@
 function Export-EgnyteUsers {
+    <#
+.SYNOPSIS
+Brief description
+
+.DESCRIPTION
+Longer description
+
+i.PARAMETER Foobar
+Descriptions of parameter Foobar
+
+.INPUTS
+Types of objects that can be piped to the function
+
+.OUTPUTS
+Type of the objects that the function returns
+
+.EXAMPLE
+Actual example
+
+.NOTES
+Additional notes
+
+.LINK
+Related URL links
+#>
     [CmdletBinding(SupportsShouldProcess)]
     Param (
 	[Parameter(Mandatory)]

@@ -1,20 +1,30 @@
 function Get-EgnyteUsers {
     <#
-.SYNOPSIS
-Get all or filtered Egnyte users
+    .SYNOPSIS
+    Brief description
 
-.DESCRIPTION
-Longer description
+    .DESCRIPTION
+    Longer description
 
-.PARAMETER Foobar
-Descriptions of parameter Foobar
+    .PARAMETER Foobar
+    Descriptions of parameter Foobar
 
-.EXAMPLE
-Actual example
+    .INPUTS
+    Types of objects that can be piped to the function
 
-.NOTES
-Additional notes
-#>
+    .OUTPUTS
+    Type of the objects that the function returns
+
+    .EXAMPLE
+    Actual example
+
+    .NOTES
+    Additional notes
+
+    .LINK
+    Related URL links
+    #>
+
     [CmdletBinding(SupportsShouldProcess,DefaultParameterSetName="Filter")]
     Param (
 	[object]$Session=(Get-EgnyteSession),
