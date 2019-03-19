@@ -1,10 +1,9 @@
-function Get-EgnyteUser {
+function Get-EgnyteADUser {
     [CmdletBinding(SupportsShouldProcess)]
     Param (
 	[Parameter(Mandatory,ValueFromPipeline)]
 	[Microsoft.ActiveDirectory.Management.ADUser]$ADUser,
-	[Parameter(Mandatory)]
-	[object]$Session
+	[object]$Session=(Get-EgnyteSession)
     )
 
     begin {
