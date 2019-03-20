@@ -2,7 +2,7 @@ function New-EgnyteSession {
     [CmdletBinding(SupportsShouldProcess)]
     Param (
 	[string]$Username=$(Read-Host "Enter your Egnyte Administrator Username"),
-	[string]$Password=$(Read-Host -AsSecureString "Enter your Egnyte Administrator Password"),
+	[object]$Password=$(Read-Host -AsSecureString "Enter your Egnyte Administrator Password"),
 	[string]$Instance=$(Read-Host "Enter the name of the Egnyte instance you'd like to query"),
 	[string]$APIKey=$EgnyteAPIKey,
 	[System.IO.FileInfo]$JsonSessionDir=$JsonSessionDir
@@ -10,7 +10,7 @@ function New-EgnyteSession {
 
     Add-Type -AssemblyName System.Web # suddenly stopped loading by default
 
-    $BTSR     = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($SecurePassword)
+    $BTSR     = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Password)
     $Password = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BTSR)
     $URL      = "https://$Instance.egnyte.com"
     $Resource = "/puboauth/token?grant_type=password&username=$Username&password=$Password&client_id=$APIKey"
