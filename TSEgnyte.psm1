@@ -21,6 +21,7 @@ if (Test-Path "$PSScriptRoot\$ConfigFile") {
 	$EgnyteAPIKeyFile = $Config.EgnyteAPIKeyFile
 	$EgnyteAPIKey     = ConvertFrom-SecureFile $EgnyteAPIKeyFile
 	$JsonSessionsDir  = $Config.JsonSessionsDir
+	$ADGlobalCatalog  = $Config.ADGlobalCatalog
 	New-Path $JsonSessionsDir -Type 'Directory'
     } catch {
 	Write-Warning "Invalid configuration data in $ConfigFile."
@@ -34,6 +35,7 @@ if (Test-Path "$PSScriptRoot\$ConfigFile") {
 @{
     JsonSessionsDir  = ""
     EgnyteAPIKeyFile = ""
+    ADGlobalCatalog  = ""
 }
 "@ | Out-File -Encoding UTF8 -FilePath "$PSScriptRoot\$ConfigFile"
     Write-Warning "Generated $PSScriptRoot\$ConfigFile."
