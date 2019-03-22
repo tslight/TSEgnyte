@@ -61,10 +61,9 @@ function Export-EgnyteADUsers {
 		      Where-Object {
 			  ($_.'AD User Found' -eq $True) -And
 			  ($_.'AD Enabled' -eq $True) -And
-			  ($_.'Egnyte Active' -eq 'yes') -And
-			  ($_.'Egnyte Account Type' -eq 'power')
-		      } |
-			Select-Object $Selection
+			  ($_.Active -eq 'yes') -And
+			  ($_.Type -eq 'power')
+		      } | Select-Object $Selection
 		} elseif ($IncorrectlyChargedUsers) {
 		    $InstanceUsers = $InputCsv |
 		      Import-Csv |
@@ -72,10 +71,9 @@ function Export-EgnyteADUsers {
 		      Where-Object {
 			  (($_.'AD User Found' -eq $False) -or
 			   ($_.'AD Enabled' -eq $False)) -And
-			  ($_.'Egnyte Active' -eq 'yes') -And
-			  ($_.'Egnyte Account Type' -eq 'power')
-		      } |
-			Select-Object $Selection
+			  ($_.Active -eq 'yes') -And
+			  ($_.Type -eq 'power')
+		      } | Select-Object $Selection
 		} else {
 		    $InstanceUsers = $InputCsv |
 		      Import-Csv |
@@ -93,11 +91,15 @@ function Export-EgnyteADUsers {
 
     end {
 	$Xlsx = "$ExportPath\$Date\$Name-$Date"
-	if ($SingleWorksheet) {
-	    $Users | Export-Csv -NoTypeInformation $CsvPath
-	    Get-Item $CsvPath | Convert-CsvToXls -Xlsx $Xlsx
+	if ((Test-Path "$Xlsx.xlsx") -And (-Not $Force)) {
+	    Write-Warning "$Xlsx.xlsx already exists. Use -Force to overwrite..."
 	} else {
-	    Get-ChildItem "$ExportPath\$Date\Csv\*.csv" | Convert-CsvToXls -Xlsx $Xlsx
+	    if ($SingleWorksheet) {
+		$Users | Export-Csv -NoTypeInformation $CsvPath
+		Get-Item $CsvPath | Convert-CsvToXls -Xlsx $Xlsx
+	    } else {
+		Get-ChildItem "$ExportPath\$Date\Csv\*.csv" | Convert-CsvToXls -Xlsx $Xlsx
+	    }
 	}
     }
 }
